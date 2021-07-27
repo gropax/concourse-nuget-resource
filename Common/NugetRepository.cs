@@ -34,7 +34,7 @@ namespace Check
         }
 
 
-		public async Task<string[]> GetNewPackageVersions(string packageId, string currentVersion)
+		public async Task<string[]> GetNewPackageVersions(string packageId, string currentVersion = null)
         {
 			string[] newVersions;
 
@@ -43,7 +43,7 @@ namespace Check
 				var findResource = await _repo.GetResourceAsync<FindPackageByIdResource>(CancellationToken.None);
 				IEnumerable<NuGetVersion> versions = await findResource.GetAllVersionsAsync(packageId, sourceCacheContext, NullLogger.Instance, CancellationToken.None);
 
-				var current = NuGetVersion.Parse(currentVersion);
+				var current = NuGetVersion.Parse(currentVersion ?? "0.0.0");
 				newVersions = versions.Where(v => v >= current).Select(v => v.ToString()).ToArray();
 			}
 
