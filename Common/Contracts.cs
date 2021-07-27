@@ -1,15 +1,46 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Resource
+namespace Common
 {
-    public class CheckDto
+    public class CheckInputDto
     {
         [JsonPropertyName("source")]
         public SourceDto Source { get; set; }
 
         [JsonPropertyName("version")]
         public VersionDto Version { get; set; }
+    }
+
+    public class InInputDto
+    {
+        [JsonPropertyName("source")]
+        public SourceDto Source { get; set; }
+
+        [JsonPropertyName("version")]
+        public VersionDto Version { get; set; }
+
+        [JsonPropertyName("params")]
+        public object Params { get; set; }
+    }
+
+    public class InOutputDto
+    {
+        [JsonPropertyName("version")]
+        public VersionDto Version { get; set; }
+
+        [JsonPropertyName("metadata")]
+        public Meta[] Metadata { get; set; }
+    }
+
+    public class Meta
+    {
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("value")]
+        public string Value { get; set; }
     }
 
     public class SourceDto

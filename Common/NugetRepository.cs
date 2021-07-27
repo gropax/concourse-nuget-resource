@@ -12,7 +12,7 @@ using NuGet.Protocol.Core.Types;
 using NuGet.Versioning;
 using System.Threading;
 
-namespace Check
+namespace Common
 {
     public class NugetRepository
     {

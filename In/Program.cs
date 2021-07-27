@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Check
+namespace In
 {
     class Program
     {
         static async Task Main(string[] args)
         {
-            await new Command(Console.In, Console.Error, Console.Out).Run();
+            await new Command(Console.In, Console.Error, Console.Out, args[0]).Run();
         }
     }
 }

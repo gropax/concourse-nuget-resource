@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Check\Check.csproj" />
     <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\In\In.csproj" />
   </ItemGroup>
 
 </Project>

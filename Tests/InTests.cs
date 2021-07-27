@@ -6,8 +6,18 @@ using Xunit;
 
 namespace Tests
 {
-    public class CheckTests
+    public class InTests
     {
+        private string _targetDir;
+        public InTests()
+        {
+            _targetDir = Path.GetFullPath("./packages");
+            if (Directory.Exists(_targetDir))
+                Directory.Delete(_targetDir, recursive: true);
+
+            Directory.CreateDirectory(_targetDir);
+        }
+
         [Fact]
         public async Task TestCommand()
         {
@@ -28,13 +38,16 @@ namespace Tests
             var stdoutBuilder = new StringBuilder();
             var stdout = new StringWriter(stdoutBuilder);
 
-            var cmd = new Check.Command(stdin, stderr, stdout);
+            var cmd = new In.Command(stdin, stderr, stdout, _targetDir);
             bool success = await cmd.Run();
 
             string debug = stderr.ToString();
 
             Assert.True(success);
             Assert.False(string.IsNullOrWhiteSpace(stdout.ToString()));
+
+            var package = Path.Combine(_targetDir, "Newtonsoft.Json.12.0.3.nupkg");
+            Assert.True(File.Exists(package));
         }
     }
 }

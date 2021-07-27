@@ -1,4 +1,4 @@
-﻿using Resource;
+﻿using Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,31 +9,21 @@ using System.Threading.Tasks;
 
 namespace Check
 {
-    public class Command
+    public class Command : CommandBase
     {
-        private TextReader _stdin;
-        private TextWriter _stderr;
-        private TextWriter _stdout;
         public Command(TextReader stdin, TextWriter stderr, TextWriter stdout)
-        {
-            _stdin = stdin;
-            _stderr = stderr;
-            _stdout = stdout;
-        }
+            : base(stdin, stderr, stdout) { }
+
 
         public async Task<bool> Run()
         {
-            var inputJson = _stdin.ReadToEnd();
-            Log($"STDIN: {inputJson}");
-            var input = JsonSerializer.Deserialize<CheckDto>(inputJson);
-
-            var repo = new NugetRepository(input.Source.Uri);
-
+            var input = ReadStdin<CheckInputDto>();
             VersionDto[] output = null;
 
             try
             {
-                var newVersions = await repo.GetNewPackageVersions(input.Version.PackageId, input.Version.Version);
+                var repo = new NugetRepository(input.Source.Uri);
+                var newVersions = await repo.GetNewPackageVersions(input.Source.PackageId, input.Version.Version);
                 output = newVersions.Select(v => new VersionDto()
                     {
                         PackageId = input.Version.PackageId,
@@ -42,19 +32,12 @@ namespace Check
             }
             catch (Exception e)
             {
-                Log($"Error: {e.GetType()} : {e.Message}");
+                LogError(e);
                 return false;
             }
 
-            var outputJson = JsonSerializer.Serialize(output);
-            Log($"STDOUT: {outputJson}");
-            _stdout.WriteLine(outputJson);
+            WriteStdout(output);
             return true;
-        }
-
-        private void Log(string message)
-        {
-            _stderr.WriteLine(message);
         }
     }
 }
