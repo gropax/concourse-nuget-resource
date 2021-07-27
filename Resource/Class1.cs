@@ -9,7 +9,7 @@ namespace Resource
         public SourceDto Source { get; set; }
 
         [JsonPropertyName("version")]
-        public SourceDto Version { get; set; }
+        public VersionDto Version { get; set; }
     }
 
     public class SourceDto
